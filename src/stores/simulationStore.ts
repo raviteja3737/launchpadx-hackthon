@@ -61,6 +61,26 @@ interface SimState extends ControlSnapshot {
   resetAll: () => void;
 }
 
+const STORAGE_KEY = "cross-sense-sim-controls";
+
+function readSnapshot(): ControlSnapshot | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as ControlSnapshot;
+    if (!parsed || typeof parsed !== "object" || !parsed.controls) return null;
+    return {
+      controls: { ...makeControls(), ...parsed.controls },
+      degradation: parsed.degradation ?? 0.35,
+      autoDegrade: parsed.autoDegrade ?? true,
+      aiResponses: { ...DEFAULT_AI_RESPONSES, ...(parsed.aiResponses ?? {}) },
+    };
+  } catch {
+    return null;
+  }
+}
+
 let timer: ReturnType<typeof setInterval> | null = null;
 let sync: ReturnType<typeof createBroadcastSync<ControlSnapshot>> | null = null;
 let receiving = false;
@@ -72,7 +92,15 @@ export const useSimulationStore = create<SimState>((set, get) => {
   const publish = () => {
     if (receiving) return;
     const { controls, degradation, autoDegrade, aiResponses } = get();
-    sync?.post({ controls, degradation, autoDegrade, aiResponses });
+    const snapshot: ControlSnapshot = { controls, degradation, autoDegrade, aiResponses };
+    sync?.post(snapshot);
+    if (typeof window !== "undefined") {
+      try {
+        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(snapshot));
+      } catch {
+        /* storage unavailable — broadcast still works */
+      }
+    }
   };
 
   return {
@@ -87,10 +115,28 @@ export const useSimulationStore = create<SimState>((set, get) => {
 
     startEngine: () => {
       if (typeof window === "undefined") return;
+      // Pick up any control changes made in the Hacker Pod (other tab or earlier visit).
+      const stored = readSnapshot();
+      if (stored) {
+        receiving = true;
+        set({
+          ...stored,
+          machines: initialStates(stored.controls, stored.degradation),
+        });
+        receiving = false;
+      }
       if (!sync) {
         sync = createBroadcastSync<ControlSnapshot>("cross-sense-sim", (payload) => {
           receiving = true;
           set(payload);
+          receiving = false;
+        });
+        window.addEventListener("storage", (event) => {
+          if (event.key !== STORAGE_KEY) return;
+          const next = readSnapshot();
+          if (!next) return;
+          receiving = true;
+          set(next);
           receiving = false;
         });
       }
@@ -205,6 +251,7 @@ export const useSimulationStore = create<SimState>((set, get) => {
     },
 
     resetAll: () => {
+      if (typeof window !== "undefined") window.localStorage.removeItem(STORAGE_KEY);
       set({
         controls: makeControls(),
         degradation: initialDegradation,

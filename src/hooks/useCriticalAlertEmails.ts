@@ -4,15 +4,25 @@ import { useServerFn } from "@tanstack/react-start";
 import { sendCriticalAlertEmail } from "@/lib/alertEmail.functions";
 import { MACHINES } from "@/lib/mockData";
 import { useSimulationStore } from "@/stores/simulationStore";
+import type { MachineState } from "@/types";
 
 /**
- * Watches the live simulation and sends one real email per critical incident.
- * A machine must recover (leave critical) before it can alert again.
+ * Every machine is wired for email alerts. An email fires whenever an asset enters
+ * a fault condition — powered off, sensor offline, warning or critical — and re-arms
+ * only after the asset returns to a healthy/watch state with its sensor back online.
  */
+function faultReason(state: MachineState): string | null {
+  if (!state.online) return "Machine powered off";
+  if (state.sensorOffline) return "Sensor feed offline";
+  if (state.status === "critical") return "Critical degradation";
+  if (state.status === "warning") return "Warning — degrading fast";
+  return null;
+}
+
 export function useCriticalAlertEmails() {
   const machines = useSimulationStore((s) => s.machines);
   const send = useServerFn(sendCriticalAlertEmail);
-  const alerted = useRef<Set<string>>(new Set());
+  const alerted = useRef<Map<string, string>>(new Map());
   const inFlight = useRef<Set<string>>(new Set());
 
   useEffect(() => {
@@ -20,20 +30,25 @@ export function useCriticalAlertEmails() {
       const state = machines[machine.id];
       if (!state) continue;
 
-      if (state.status !== "critical") {
+      const reason = faultReason(state);
+      if (!reason) {
         alerted.current.delete(machine.id);
         continue;
       }
-      if (alerted.current.has(machine.id) || inFlight.current.has(machine.id)) continue;
+      // One email per distinct fault condition per incident.
+      if (alerted.current.get(machine.id) === reason) continue;
+      if (inFlight.current.has(machine.id)) continue;
 
-      alerted.current.add(machine.id);
+      alerted.current.set(machine.id, reason);
       inFlight.current.add(machine.id);
 
       void send({
         data: {
           machineId: machine.id,
           machineName: machine.name,
-          status: state.status,
+          status: `${state.status}${state.online ? "" : " (offline)"}${
+            state.sensorOffline ? " (sensor offline)" : ""
+          } — ${reason}`,
           vibration: state.vibration,
           cycleTime: state.cycleTime,
           output: state.output,
@@ -43,8 +58,8 @@ export function useCriticalAlertEmails() {
       })
         .then((result) => {
           if (result.sent) {
-            toast.error(`Critical alert emailed — ${machine.id}`, {
-              description: `Sent to ${result.to}`,
+            toast.error(`Alert emailed — ${machine.id}`, {
+              description: `${reason} · sent to ${result.to}`,
             });
           } else {
             alerted.current.delete(machine.id);
@@ -55,7 +70,7 @@ export function useCriticalAlertEmails() {
         })
         .catch((error: unknown) => {
           alerted.current.delete(machine.id);
-          console.error("Critical alert email failed", error);
+          console.error("Alert email failed", error);
         })
         .finally(() => {
           inFlight.current.delete(machine.id);
