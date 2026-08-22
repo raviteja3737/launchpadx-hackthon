@@ -38,7 +38,7 @@ export function MachineCard({
         <Metric label="Output" value={`${state.output}`} unit="u/hr" />
         <Metric label="Cycle" value={`${state.cycleTime}`} unit="s" />
         <Metric label="Vibration" value={`${state.vibration}`} unit="mm/s" />
-        <Metric label="Temp" value={`${state.temperature}`} unit="°C" />
+        <Metric label="Oil temp" value={`${state.temperature}`} unit="°C" />
         <Metric label="Power" value={`${state.power}`} unit="kW" />
         <Metric label="Health" value={`${state.health}`} unit="/100" />
       </dl>

@@ -40,7 +40,7 @@ const METRICS: { key: keyof MachineMetrics; label: string; step: number }[] = [
   { key: "output", label: "Output (u/hr)", step: 5 },
   { key: "cycleTime", label: "Cycle time (s)", step: 1 },
   { key: "vibration", label: "Vibration (mm/s)", step: 0.5 },
-  { key: "temperature", label: "Temperature (°C)", step: 2 },
+  { key: "temperature", label: "Oil temperature (°C)", step: 2 },
   { key: "power", label: "Power (kW)", step: 2 },
 ];
 

@@ -84,7 +84,7 @@ function MachineDetail() {
             color="var(--primary)"
           />
           <ChartPanel
-            title="Temperature"
+            title="Oil temperature"
             caption="Bearing housing probe."
             data={history}
             dataKey="temperature"

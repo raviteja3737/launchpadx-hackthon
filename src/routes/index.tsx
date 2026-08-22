@@ -4,9 +4,9 @@ import { OperatorLayout } from "@/components/layout/OperatorLayout";
 import { MachineCard } from "@/components/machines/MachineCard";
 import { StatCard } from "@/components/ui/stat-card";
 import { StatusBadge } from "@/components/ui/status-badge";
+import { ChipLine } from "@/components/machines/ChipLine";
 import { MACHINES } from "@/lib/mockData";
 import { computeFactoryKpis, pct } from "@/lib/kpis";
-import { statusFromHealth } from "@/lib/simulation";
 import { useSimulationStore } from "@/stores/simulationStore";
 
 export const Route = createFileRoute("/")({
@@ -38,10 +38,10 @@ function Overview() {
       <div className="space-y-6">
         <section className="rounded-xl border border-border bg-card p-5 shadow-sm">
           <div className="flex flex-wrap items-center gap-3">
-            <h1 className="font-display text-xl font-bold">Factory health</h1>
+            <h1 className="font-display text-xl font-bold">Chip factory health</h1>
             <StatusBadge status={kpi.status} />
             <span className="text-sm text-muted-foreground">
-              Shift B · 06:00–14:00 · 6 assets monitored across 13 sources
+              Shift B · 06:00–14:00 · 6 fab assets monitored across 13 sources
             </span>
           </div>
           <p className="mt-2 max-w-3xl text-sm text-muted-foreground">
@@ -111,7 +111,7 @@ function Overview() {
 
 
         <section>
-          <h2 className="mb-3 font-display text-lg font-semibold">Machines</h2>
+          <h2 className="mb-3 font-display text-lg font-semibold">Fab machines</h2>
           <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
             {MACHINES.map((machine) => (
               <MachineCard

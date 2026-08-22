@@ -26,7 +26,7 @@ function MachineList() {
     <OperatorLayout>
       <h1 className="font-display text-xl font-bold">Machines</h1>
       <p className="mt-1 text-sm text-muted-foreground">
-        Six assets across three missions. Values refresh every 1.5 seconds.
+        Six chip-fab assets across three missions. Values refresh every 1.5 seconds.
       </p>
 
       <div className="mt-4 overflow-x-auto rounded-xl border border-border bg-card shadow-sm">
@@ -39,7 +39,7 @@ function MachineList() {
               <th className="px-4 py-3 text-right">Output</th>
               <th className="px-4 py-3 text-right">Cycle</th>
               <th className="px-4 py-3 text-right">Vibration</th>
-              <th className="px-4 py-3 text-right">Temp</th>
+              <th className="px-4 py-3 text-right">Oil temp</th>
               <th className="px-4 py-3 text-right">Power</th>
               <th className="px-4 py-3" />
             </tr>
