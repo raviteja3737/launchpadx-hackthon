@@ -16,7 +16,9 @@ export interface FactoryKpis {
 }
 
 export function computeFactoryKpis(machines: Record<string, MachineState>): FactoryKpis {
-  const states = MACHINES.map((m) => machines[m.id]).filter(Boolean);
+  const states: MachineState[] = MACHINES.map((m) => machines[m.id]).filter(
+    (s): s is MachineState => Boolean(s),
+  );
   const target = MACHINES.reduce((sum, m) => sum + m.baseline.output, 0);
   const output = states.reduce((sum, s) => sum + s.output, 0);
   const cycleTime =

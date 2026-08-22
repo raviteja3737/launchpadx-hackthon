@@ -1,4 +1,4 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { FileText, MessageSquare, Stethoscope } from "lucide-react";
 import { OperatorLayout } from "@/components/layout/OperatorLayout";
 import { ChartPanel } from "@/components/ui/chart-panel";
@@ -21,16 +21,12 @@ export const Route = createFileRoute("/machines/$machineId")({
       },
     ],
   }),
-  loader: ({ params }) => {
-    const machine = MACHINES.find((m) => m.id === params.machineId);
-    if (!machine) throw notFound();
-    return machine;
-  },
   component: MachineDetail,
 });
 
 function MachineDetail() {
-  const machine = Route.useLoaderData()!;
+  const { machineId } = Route.useParams();
+  const machine = MACHINES.find((m) => m.id === machineId) ?? MACHINES[0]!;
   const state = useSimulationStore((s) => s.machines[machine.id]);
   const history = useSimulationStore((s) => s.history[machine.id] ?? []);
   const isTarget = machine.id === TARGET_MACHINE;

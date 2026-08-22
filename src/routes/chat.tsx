@@ -71,7 +71,7 @@ function ChatPage() {
 
   const answer = (text: string) => {
     const key = matchKey(text);
-    const raw = responses[key] ?? responses.production;
+    const raw = responses[key] ?? responses["production"] ?? "";
     return raw
       .replace("{{output}}", String(totalOutput))
       .replace("{{vibration}}", String(state?.vibration ?? "—"))

@@ -1,4 +1,4 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { CheckCircle2, Loader2, Search } from "lucide-react";
 import { OperatorLayout } from "@/components/layout/OperatorLayout";
@@ -20,16 +20,12 @@ export const Route = createFileRoute("/investigations/$id")({
       },
     ],
   }),
-  loader: ({ params }) => {
-    const inv = INVESTIGATIONS.find((i) => i.id === params.id);
-    if (!inv) throw notFound();
-    return inv;
-  },
   component: InvestigationDetail,
 });
 
 function InvestigationDetail() {
-  const inv = Route.useLoaderData()!;
+  const { id } = Route.useParams();
+  const inv = INVESTIGATIONS.find((i) => i.id === id) ?? INVESTIGATIONS[0]!;
   const [revealed, setRevealed] = useState(0);
   const [decision, setDecision] = useState<null | "approved" | "rejected" | "more">(null);
   const [execStep, setExecStep] = useState(0);
