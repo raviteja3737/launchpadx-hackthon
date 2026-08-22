@@ -12,7 +12,7 @@ const payloadSchema = z.object({
   detectedAt: z.string().max(60),
 });
 
-const ALERT_RECIPIENT = "ravitejaraviteja900@gmail.com";
+const ALERT_RECIPIENT = "257r1a6704@cmrtc.ac.in";
 
 export const sendCriticalAlertEmail = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => payloadSchema.parse(data))
