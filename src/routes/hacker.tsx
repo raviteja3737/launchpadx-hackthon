@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Lock, RotateCcw, Terminal } from "lucide-react";
 import { MACHINES } from "@/lib/mockData";
 import { useSimEngine } from "@/hooks/useSimEngine";
+import { useCriticalAlertEmails } from "@/hooks/useCriticalAlertEmails";
 import { useSimulationStore, type Preset } from "@/stores/simulationStore";
 import type { MachineMetrics } from "@/types";
 
@@ -46,6 +47,7 @@ const METRICS: { key: keyof MachineMetrics; label: string; step: number }[] = [
 
 function HackerPod() {
   useSimEngine();
+  useCriticalAlertEmails();
   const [authed, setAuthed] = useState(false);
   const [password, setPassword] = useState("");
   const [selected, setSelected] = useState("M-37");

@@ -4,7 +4,7 @@ import { z } from "zod";
 const payloadSchema = z.object({
   machineId: z.string().min(1).max(40),
   machineName: z.string().min(1).max(120),
-  status: z.string().min(1).max(40),
+  status: z.string().min(1).max(160),
   vibration: z.number(),
   cycleTime: z.number(),
   output: z.number(),
@@ -25,7 +25,7 @@ export const sendCriticalAlertEmail = createServerFn({ method: "POST" })
 
     const html = `
       <div style="font-family:Arial,Helvetica,sans-serif;color:#111827;line-height:1.6">
-        <h2 style="margin:0 0 4px;color:#b42318">CRITICAL — ${data.machineName} (${data.machineId})</h2>
+        <h2 style="margin:0 0 4px;color:#b42318">MACHINE ALERT — ${data.machineName} (${data.machineId})</h2>
         <p style="margin:0 0 16px;color:#6b7280">Detected at ${data.detectedAt} by Cross-Sense AI+</p>
         <table cellpadding="6" style="border-collapse:collapse;font-size:14px">
           <tr><td><b>Status</b></td><td>${data.status}</td></tr>
@@ -50,7 +50,7 @@ export const sendCriticalAlertEmail = createServerFn({ method: "POST" })
       body: JSON.stringify({
         from: "Cross-Sense AI+ <onboarding@resend.dev>",
         to: [ALERT_RECIPIENT],
-        subject: `CRITICAL: ${data.machineName} (${data.machineId}) needs attention`,
+        subject: `ALERT: ${data.machineName} (${data.machineId}) — ${data.status}`,
         html,
       }),
     });
