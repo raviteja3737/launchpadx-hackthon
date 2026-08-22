@@ -132,6 +132,7 @@ export function OperatorLayout({ children }: { children: ReactNode }) {
         </header>
         <main className="flex-1 p-5">{children}</main>
       </div>
+      <Toaster />
     </div>
   );
 }
