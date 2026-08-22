@@ -66,58 +66,49 @@ function Overview() {
           <ArrowRight className="ml-auto size-4 text-muted-foreground" />
         </Link>
 
-        <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7">
+        <ChipLine
+          status={kpi.status}
+          throughput={kpi.output}
+          oilTemp={
+            Math.round(
+              (MACHINES.reduce((sum, m) => sum + (machines[m.id]?.temperature ?? 0), 0) /
+                Math.max(1, MACHINES.length)) * 10,
+            ) / 10
+          }
+        />
+
+        <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <StatCard
-            label="Output"
+            label="Chip output"
             value={kpi.output}
-            unit="u/hr"
+            unit="chips/hr"
             delta={pct(kpi.outputDeltaPct)}
             status={kpi.outputDeltaPct < -5 ? "critical" : kpi.outputDeltaPct < -2 ? "warning" : "good"}
-            caption={`Target ${kpi.targetOutput} u/hr across all lines.`}
+            caption={`Target ${kpi.targetOutput} chips/hr across all fab lines.`}
           />
           <StatCard
-            label="Avg cycle time"
-            value={kpi.cycleTime}
-            unit="s"
-            status={kpi.cycleTime > 29 ? "warning" : "good"}
-            caption="Seconds per part. Rising cycle time means machines are retrying."
-          />
-          <StatCard
-            label="Downtime"
-            value={kpi.downtimeMin}
-            unit="min/hr"
-            status={kpi.downtimeMin > 6 ? "warning" : "good"}
-            caption="Lost production converted to equivalent stopped minutes."
-          />
-          <StatCard
-            label="Machine health"
-            value={kpi.health}
-            unit="/100"
-            status={statusFromHealth(kpi.health)}
-            caption="Blended index of output, cycle, vibration and temperature."
-          />
-          <StatCard
-            label="Quality"
+            label="Yield"
             value={kpi.quality}
             unit="%"
             status={kpi.quality < 98 ? "warning" : "good"}
-            caption="First-pass yield estimate from the inspection camera."
+            caption="First-pass die yield from the inspection camera."
           />
           <StatCard
             label="Energy"
             value={kpi.energy}
             unit="kW"
             status="good"
-            caption="Live plant draw. Extra drag shows up as extra kilowatts."
+            caption="Live fab draw. Extra drag shows up as extra kilowatts."
           />
           <StatCard
             label="Business impact"
             value={`$${kpi.impactPerHour.toLocaleString()}`}
             unit="/hr"
             status={kpi.impactPerHour > 5000 ? "critical" : "watch"}
-            caption="Value of the units not produced at the current rate."
+            caption="Value of the chips not produced at the current rate."
           />
         </section>
+
 
         <section>
           <h2 className="mb-3 font-display text-lg font-semibold">Machines</h2>
