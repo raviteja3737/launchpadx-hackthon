@@ -14,6 +14,8 @@ import {
 import { useEffect, useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { useSimEngine } from "@/hooks/useSimEngine";
+import { useCriticalAlertEmails } from "@/hooks/useCriticalAlertEmails";
+import { Toaster } from "@/components/ui/sonner";
 import { useSimulationStore } from "@/stores/simulationStore";
 import { SEED_ALERTS } from "@/lib/mockData";
 
