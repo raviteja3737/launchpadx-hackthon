@@ -10,33 +10,141 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AlertsRouteImport } from './routes/alerts'
+import { Route as ChatRouteImport } from './routes/chat'
+import { Route as EmailTrailRouteImport } from './routes/email-trail'
+import { Route as HackerRouteImport } from './routes/hacker'
+import { Route as InvestigationsIndexRouteImport } from './routes/investigations/index'
+import { Route as InvestigationsIdRouteImport } from './routes/investigations/$id'
+import { Route as MachinesIndexRouteImport } from './routes/machines/index'
+import { Route as MachinesMachineIdRouteImport } from './routes/machines/$machineId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AlertsRoute = AlertsRouteImport.update({
+  id: '/alerts',
+  path: '/alerts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChatRoute = ChatRouteImport.update({
+  id: '/chat',
+  path: '/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmailTrailRoute = EmailTrailRouteImport.update({
+  id: '/email-trail',
+  path: '/email-trail',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HackerRoute = HackerRouteImport.update({
+  id: '/hacker',
+  path: '/hacker',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InvestigationsIndexRoute = InvestigationsIndexRouteImport.update({
+  id: '/investigations/',
+  path: '/investigations/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InvestigationsIdRoute = InvestigationsIdRouteImport.update({
+  id: '/investigations/$id',
+  path: '/investigations/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MachinesIndexRoute = MachinesIndexRouteImport.update({
+  id: '/machines/',
+  path: '/machines/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MachinesMachineIdRoute = MachinesMachineIdRouteImport.update({
+  id: '/machines/$machineId',
+  path: '/machines/$machineId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/alerts': typeof AlertsRoute
+  '/chat': typeof ChatRoute
+  '/email-trail': typeof EmailTrailRoute
+  '/hacker': typeof HackerRoute
+  '/investigations/$id': typeof InvestigationsIdRoute
+  '/machines/$machineId': typeof MachinesMachineIdRoute
+  '/investigations/': typeof InvestigationsIndexRoute
+  '/machines/': typeof MachinesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/alerts': typeof AlertsRoute
+  '/chat': typeof ChatRoute
+  '/email-trail': typeof EmailTrailRoute
+  '/hacker': typeof HackerRoute
+  '/investigations/$id': typeof InvestigationsIdRoute
+  '/machines/$machineId': typeof MachinesMachineIdRoute
+  '/investigations': typeof InvestigationsIndexRoute
+  '/machines': typeof MachinesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/alerts': typeof AlertsRoute
+  '/chat': typeof ChatRoute
+  '/email-trail': typeof EmailTrailRoute
+  '/hacker': typeof HackerRoute
+  '/investigations/$id': typeof InvestigationsIdRoute
+  '/machines/$machineId': typeof MachinesMachineIdRoute
+  '/investigations/': typeof InvestigationsIndexRoute
+  '/machines/': typeof MachinesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/alerts'
+    | '/chat'
+    | '/email-trail'
+    | '/hacker'
+    | '/investigations/$id'
+    | '/machines/$machineId'
+    | '/investigations/'
+    | '/machines/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/alerts'
+    | '/chat'
+    | '/email-trail'
+    | '/hacker'
+    | '/investigations/$id'
+    | '/machines/$machineId'
+    | '/investigations'
+    | '/machines'
+  id:
+    | '__root__'
+    | '/'
+    | '/alerts'
+    | '/chat'
+    | '/email-trail'
+    | '/hacker'
+    | '/investigations/$id'
+    | '/machines/$machineId'
+    | '/investigations/'
+    | '/machines/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AlertsRoute: typeof AlertsRoute
+  ChatRoute: typeof ChatRoute
+  EmailTrailRoute: typeof EmailTrailRoute
+  HackerRoute: typeof HackerRoute
+  InvestigationsIdRoute: typeof InvestigationsIdRoute
+  MachinesMachineIdRoute: typeof MachinesMachineIdRoute
+  InvestigationsIndexRoute: typeof InvestigationsIndexRoute
+  MachinesIndexRoute: typeof MachinesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +156,75 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/alerts': {
+      id: '/alerts'
+      path: '/alerts'
+      fullPath: '/alerts'
+      preLoaderRoute: typeof AlertsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/chat': {
+      id: '/chat'
+      path: '/chat'
+      fullPath: '/chat'
+      preLoaderRoute: typeof ChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/email-trail': {
+      id: '/email-trail'
+      path: '/email-trail'
+      fullPath: '/email-trail'
+      preLoaderRoute: typeof EmailTrailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/hacker': {
+      id: '/hacker'
+      path: '/hacker'
+      fullPath: '/hacker'
+      preLoaderRoute: typeof HackerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/investigations/': {
+      id: '/investigations/'
+      path: '/investigations'
+      fullPath: '/investigations/'
+      preLoaderRoute: typeof InvestigationsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/investigations/$id': {
+      id: '/investigations/$id'
+      path: '/investigations/$id'
+      fullPath: '/investigations/$id'
+      preLoaderRoute: typeof InvestigationsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/machines/': {
+      id: '/machines/'
+      path: '/machines'
+      fullPath: '/machines/'
+      preLoaderRoute: typeof MachinesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/machines/$machineId': {
+      id: '/machines/$machineId'
+      path: '/machines/$machineId'
+      fullPath: '/machines/$machineId'
+      preLoaderRoute: typeof MachinesMachineIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AlertsRoute: AlertsRoute,
+  ChatRoute: ChatRoute,
+  EmailTrailRoute: EmailTrailRoute,
+  HackerRoute: HackerRoute,
+  InvestigationsIdRoute: InvestigationsIdRoute,
+  MachinesMachineIdRoute: MachinesMachineIdRoute,
+  InvestigationsIndexRoute: InvestigationsIndexRoute,
+  MachinesIndexRoute: MachinesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
