@@ -14,6 +14,8 @@ import {
 import { useEffect, useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { useSimEngine } from "@/hooks/useSimEngine";
+import { useCriticalAlertEmails } from "@/hooks/useCriticalAlertEmails";
+import { Toaster } from "@/components/ui/sonner";
 import { useSimulationStore } from "@/stores/simulationStore";
 import { SEED_ALERTS } from "@/lib/mockData";
 
@@ -56,6 +58,7 @@ function ThemeToggle() {
 
 export function OperatorLayout({ children }: { children: ReactNode }) {
   useSimEngine();
+  useCriticalAlertEmails();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const tick = useSimulationStore((s) => s.tick);
   const openAlerts = SEED_ALERTS.filter((a) => a.status !== "Resolved").length;
@@ -129,6 +132,7 @@ export function OperatorLayout({ children }: { children: ReactNode }) {
         </header>
         <main className="flex-1 p-5">{children}</main>
       </div>
+      <Toaster />
     </div>
   );
 }
