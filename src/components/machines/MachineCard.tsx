@@ -10,7 +10,7 @@ export function MachineCard({
   history,
 }: {
   machine: Machine;
-  state?: MachineState;
+  state: MachineState | undefined;
   history: TelemetryPoint[];
 }) {
   if (!state) return null;

@@ -30,7 +30,7 @@ export const Route = createFileRoute("/machines/$machineId")({
 });
 
 function MachineDetail() {
-  const machine = Route.useLoaderData();
+  const machine = Route.useLoaderData()!;
   const state = useSimulationStore((s) => s.machines[machine.id]);
   const history = useSimulationStore((s) => s.history[machine.id] ?? []);
   const isTarget = machine.id === TARGET_MACHINE;

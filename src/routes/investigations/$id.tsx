@@ -29,7 +29,7 @@ export const Route = createFileRoute("/investigations/$id")({
 });
 
 function InvestigationDetail() {
-  const inv = Route.useLoaderData();
+  const inv = Route.useLoaderData()!;
   const [revealed, setRevealed] = useState(0);
   const [decision, setDecision] = useState<null | "approved" | "rejected" | "more">(null);
   const [execStep, setExecStep] = useState(0);

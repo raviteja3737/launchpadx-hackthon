@@ -47,7 +47,7 @@ function matchKey(text: string): string {
   return "production";
 }
 
-const KIND: Record<string, ChatMessage["kind"]> = {
+const KIND: Record<string, NonNullable<ChatMessage["kind"]>> = {
   production: "analytics",
   why: "diagnosis",
   diagnose: "diagnosis",
@@ -98,7 +98,7 @@ function ChatPage() {
             id: `a-${Date.now()}`,
             role: "ai",
             text: answer(text),
-            kind: KIND[key],
+            kind: KIND[key] ?? "analytics",
             createdAt: Date.now(),
           },
         ]);
