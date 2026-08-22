@@ -71,7 +71,7 @@ export function ChipLine({
       <style>{`
         @keyframes chip-travel {
           from { transform: translateX(-3rem); }
-          to { transform: translateX(calc(100% + 100vw)); }
+          to { transform: translateX(100vw); }
         }
         @keyframes chip-belt {
           from { transform: translateX(0); }
