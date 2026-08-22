@@ -58,6 +58,7 @@ function ThemeToggle() {
 
 export function OperatorLayout({ children }: { children: ReactNode }) {
   useSimEngine();
+  useCriticalAlertEmails();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const tick = useSimulationStore((s) => s.tick);
   const openAlerts = SEED_ALERTS.filter((a) => a.status !== "Resolved").length;
