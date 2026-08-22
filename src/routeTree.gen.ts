@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AlertsRouteImport } from './routes/alerts'
 import { Route as ChatRouteImport } from './routes/chat'
 import { Route as EmailTrailRouteImport } from './routes/email-trail'
+import { Route as HackerRouteImport } from './routes/hacker'
 import { Route as InvestigationsIndexRouteImport } from './routes/investigations/index'
 import { Route as InvestigationsIdRouteImport } from './routes/investigations/$id'
 import { Route as MachinesIndexRouteImport } from './routes/machines/index'
@@ -36,6 +37,11 @@ const ChatRoute = ChatRouteImport.update({
 const EmailTrailRoute = EmailTrailRouteImport.update({
   id: '/email-trail',
   path: '/email-trail',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HackerRoute = HackerRouteImport.update({
+  id: '/hacker',
+  path: '/hacker',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InvestigationsIndexRoute = InvestigationsIndexRouteImport.update({
@@ -64,6 +70,7 @@ export interface FileRoutesByFullPath {
   '/alerts': typeof AlertsRoute
   '/chat': typeof ChatRoute
   '/email-trail': typeof EmailTrailRoute
+  '/hacker': typeof HackerRoute
   '/investigations/$id': typeof InvestigationsIdRoute
   '/machines/$machineId': typeof MachinesMachineIdRoute
   '/investigations/': typeof InvestigationsIndexRoute
@@ -74,6 +81,7 @@ export interface FileRoutesByTo {
   '/alerts': typeof AlertsRoute
   '/chat': typeof ChatRoute
   '/email-trail': typeof EmailTrailRoute
+  '/hacker': typeof HackerRoute
   '/investigations/$id': typeof InvestigationsIdRoute
   '/machines/$machineId': typeof MachinesMachineIdRoute
   '/investigations': typeof InvestigationsIndexRoute
@@ -85,6 +93,7 @@ export interface FileRoutesById {
   '/alerts': typeof AlertsRoute
   '/chat': typeof ChatRoute
   '/email-trail': typeof EmailTrailRoute
+  '/hacker': typeof HackerRoute
   '/investigations/$id': typeof InvestigationsIdRoute
   '/machines/$machineId': typeof MachinesMachineIdRoute
   '/investigations/': typeof InvestigationsIndexRoute
@@ -97,6 +106,7 @@ export interface FileRouteTypes {
     | '/alerts'
     | '/chat'
     | '/email-trail'
+    | '/hacker'
     | '/investigations/$id'
     | '/machines/$machineId'
     | '/investigations/'
@@ -107,6 +117,7 @@ export interface FileRouteTypes {
     | '/alerts'
     | '/chat'
     | '/email-trail'
+    | '/hacker'
     | '/investigations/$id'
     | '/machines/$machineId'
     | '/investigations'
@@ -117,6 +128,7 @@ export interface FileRouteTypes {
     | '/alerts'
     | '/chat'
     | '/email-trail'
+    | '/hacker'
     | '/investigations/$id'
     | '/machines/$machineId'
     | '/investigations/'
@@ -128,6 +140,7 @@ export interface RootRouteChildren {
   AlertsRoute: typeof AlertsRoute
   ChatRoute: typeof ChatRoute
   EmailTrailRoute: typeof EmailTrailRoute
+  HackerRoute: typeof HackerRoute
   InvestigationsIdRoute: typeof InvestigationsIdRoute
   MachinesMachineIdRoute: typeof MachinesMachineIdRoute
   InvestigationsIndexRoute: typeof InvestigationsIndexRoute
@@ -162,6 +175,13 @@ declare module '@tanstack/react-router' {
       path: '/email-trail'
       fullPath: '/email-trail'
       preLoaderRoute: typeof EmailTrailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/hacker': {
+      id: '/hacker'
+      path: '/hacker'
+      fullPath: '/hacker'
+      preLoaderRoute: typeof HackerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/investigations/': {
@@ -200,6 +220,7 @@ const rootRouteChildren: RootRouteChildren = {
   AlertsRoute: AlertsRoute,
   ChatRoute: ChatRoute,
   EmailTrailRoute: EmailTrailRoute,
+  HackerRoute: HackerRoute,
   InvestigationsIdRoute: InvestigationsIdRoute,
   MachinesMachineIdRoute: MachinesMachineIdRoute,
   InvestigationsIndexRoute: InvestigationsIndexRoute,
