@@ -18,6 +18,7 @@ import { useCriticalAlertEmails } from "@/hooks/useCriticalAlertEmails";
 import { Toaster } from "@/components/ui/sonner";
 import { useSimulationStore } from "@/stores/simulationStore";
 import { SEED_ALERTS } from "@/lib/mockData";
+import { VoiceAgentControl } from "@/components/livekit/VoiceAgentControl";
 
 const NAV = [
   { to: "/", label: "Overview", icon: LayoutDashboard },
@@ -69,7 +70,7 @@ export function OperatorLayout({ children }: { children: ReactNode }) {
         <div className="flex items-center gap-2 border-b border-border px-5 py-4">
           <Activity className="size-5 text-accent" />
           <div>
-            <p className="font-display text-sm font-bold leading-tight">Cross-Sense AI+</p>
+            <p className="font-display text-sm font-bold leading-tight">InduSense-AI</p>
             <p className="text-[11px] text-muted-foreground">Factory Operations</p>
           </div>
         </div>
@@ -120,6 +121,7 @@ export function OperatorLayout({ children }: { children: ReactNode }) {
             </p>
           </div>
           <div className="ml-auto flex items-center gap-2">
+            <VoiceAgentControl />
             <span className="inline-flex items-center gap-1.5 rounded-full border border-status-good/40 bg-status-good/10 px-2.5 py-1 text-xs font-semibold text-status-good">
               <span className="size-1.5 animate-pulse rounded-full bg-current" />
               Live · tick {tick}

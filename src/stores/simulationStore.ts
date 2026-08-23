@@ -7,6 +7,9 @@ import {
   initialStates,
   type MachineControl,
 } from "@/lib/simulation";
+import { computeFactoryKpis } from "@/lib/kpis";
+import { machineAlertManager } from "@/lib/machineAlertManager";
+import { useLiveKitStore } from "@/lib/livekitClient";
 import type { MachineMetrics, MachineState, TelemetryPoint } from "@/types";
 
 export type Preset =
@@ -88,10 +91,48 @@ let receiving = false;
 const initialControls = makeControls();
 const initialDegradation = 0.35;
 
+function streamKpisToLiveKit(machines: Record<string, MachineState>, degradation: number) {
+  try {
+    const factoryKpis = computeFactoryKpis(machines);
+    const machineKpis: Record<string, any> = {};
+    for (const m of MACHINES) {
+      const st = machines[m.id];
+      if (st) {
+        machineKpis[m.id] = {
+          name: m.name,
+          output: st.output,
+          cycleTime: st.cycleTime,
+          vibration: st.vibration,
+          temperature: st.temperature,
+          power: st.power,
+          health: st.health,
+          status: st.status,
+          online: st.online,
+        };
+      }
+    }
+
+    useLiveKitStore.getState().broadcastKpis({
+      timestamp: Date.now(),
+      degradation,
+      machines: machineKpis,
+      factory: {
+        output: factoryKpis.output,
+        targetOutput: factoryKpis.targetOutput,
+        cycleTime: factoryKpis.cycleTime,
+        health: factoryKpis.health,
+        status: factoryKpis.status,
+      },
+    });
+  } catch (err) {
+    // Non-blocking in case LiveKit is offline
+  }
+}
+
 export const useSimulationStore = create<SimState>((set, get) => {
   const publish = () => {
     if (receiving) return;
-    const { controls, degradation, autoDegrade, aiResponses } = get();
+    const { controls, degradation, autoDegrade, aiResponses, machines } = get();
     const snapshot: ControlSnapshot = { controls, degradation, autoDegrade, aiResponses };
     sync?.post(snapshot);
     if (typeof window !== "undefined") {
@@ -101,6 +142,8 @@ export const useSimulationStore = create<SimState>((set, get) => {
         /* storage unavailable — broadcast still works */
       }
     }
+    // Instantly notify LiveKit agent of changes from Hacker Pod
+    streamKpisToLiveKit(machines, degradation);
   };
 
   return {
@@ -173,6 +216,8 @@ export const useSimulationStore = create<SimState>((set, get) => {
           ].slice(-HISTORY);
         }
         set({ machines, history, degradation, tick: state.tick + 1 });
+        // Stream latest KPIs to LiveKit agent
+        streamKpisToLiveKit(machines, degradation);
       }, TICK_MS);
     },
 
@@ -252,6 +297,7 @@ export const useSimulationStore = create<SimState>((set, get) => {
 
     resetAll: () => {
       if (typeof window !== "undefined") window.localStorage.removeItem(STORAGE_KEY);
+      machineAlertManager.reset();
       set({
         controls: makeControls(),
         degradation: initialDegradation,

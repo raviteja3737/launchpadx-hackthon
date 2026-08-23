@@ -79,19 +79,19 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Cross-Sense AI+ — Factory Operations Console" },
       { name: "description", content: "Live factory operations console with cross-modal AI detection and multi-agent root-cause investigations." },
-      { name: "author", content: "Lovable" },
       { property: "og:title", content: "Cross-Sense AI+ — Factory Operations Console" },
       { property: "og:description", content: "Cross-modal AI detection and multi-agent root-cause investigations for factory floors." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
       {
         rel: "stylesheet",
         href: appCss,
       },
+      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "shortcut icon", href: "/favicon.svg" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
